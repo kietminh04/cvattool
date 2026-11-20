@@ -1,0 +1,74 @@
+{
+  "manifest_version": 3,
+  "name": "Trợ Lý Căn Chỉnh CVAT 3D",
+  "version": "2.6.6",
+  "description": "Tiện ích mở rộng CVAT 3D - Căn chỉnh mây điểm LiDAR siêu chính xác trên nền tảng CVAT",
+  "icons": {
+    "16": "Biểu Tượng/Biểu Tượng 16.png",
+    "48": "Biểu Tượng/Biểu Tượng 48.png",
+    "128": "Biểu Tượng/Biểu Tượng 128.png"
+  },
+  "permissions": [
+    "storage",
+    "activeTab"
+  ],
+  "host_permissions": [
+    "*://*.vantixapps.net/*",
+    "*://*.cvat.ai/*",
+    "*://*.cvat.org/*",
+    "http://localhost:*/*",
+    "http://127.0.0.1:*/*"
+  ],
+  "action": {
+    "default_title": "Bảng Điều Khiển CVAT 3D",
+    "default_popup": "Trang Popup.html",
+    "default_icon": {
+      "16": "Biểu Tượng/Biểu Tượng 16.png",
+      "48": "Biểu Tượng/Biểu Tượng 48.png",
+      "128": "Biểu Tượng/Biểu Tượng 128.png"
+    }
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "*://*.vantixapps.net/*",
+        "*://*.cvat.ai/*",
+        "*://*.cvat.org/*",
+        "http://localhost:*/*",
+        "http://127.0.0.1:*/*"
+      ],
+      "js": [
+        "Quản Lý API CVAT.js",
+        "Kho Duyệt.js",
+        "Neo Duyệt.js",
+        "Thuật Toán Căn Chỉnh.js",
+        "Dò Điểm Gãy Bán Kính.js",
+        "Mặt Đường Đồng Tâm.js",
+        "Thuật Toán Surface.js",
+        "Thuật Toán Ngoại Suy.js",
+        "Kịch Bản Trang Web.js"
+      ],
+      "css": [
+        "Giao Diện HUD.css"
+      ],
+      "world": "MAIN",
+      "run_at": "document_idle"
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "Biểu Tượng/*",
+        "Giao Diện HUD.css",
+        "Giao Diện HUD.html"
+      ],
+      "matches": [
+        "*://*.vantixapps.net/*",
+        "*://*.cvat.ai/*",
+        "*://*.cvat.org/*",
+        "http://localhost:*/*",
+        "http://127.0.0.1:*/*"
+      ]
+    }
+  ]
+}

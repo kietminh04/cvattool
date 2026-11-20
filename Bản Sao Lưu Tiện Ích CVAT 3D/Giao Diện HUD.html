@@ -1,0 +1,590 @@
+<!-- Giao Diện HUD Toolbar & Modal Chi Tiết CVAT 3D v2.0 -->
+
+<div id="cvat-3d-assistant-wrapper">
+
+    <div id="cvat-3d-assistant-hud">
+
+        <!-- Header Thanh Công Cụ (Draggable) -->
+
+        <div class="hud-header" id="hud-drag-header">
+
+            <div class="hud-header-left">
+
+                <span class="hud-drag-handle">⋮⋮</span>
+
+                <span class="hud-logo">⚡</span>
+
+                <span class="hud-title">CVAT 3D TOOLBAR v2.6.4</span>
+
+                <span class="hud-job-pill" id="hud-job-badge">🟢 Đang kết nối...</span>
+                <button class="hud-cam-map-btn" id="btn-hud-cam-map" title="Tự nối các ảnh 2D vào đúng góc hướng Camera (Front, Back-Left, Back-Right...)">📷 Nối Góc Cam</button>
+
+            </div>
+
+            <div class="hud-header-right">
+
+                <button class="hud-btn-icon" id="btn-hud-reload" title="Tải lại dữ liệu mới nhất từ Server CVAT">🔄</button>
+
+                <button class="hud-btn-icon" id="btn-hud-minimize" title="Thu gọn thành nút mini ở góc">➖</button>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- KHUNG MENU CÔNG CỤ TOÀN DIỆN -->
+
+        <div class="hud-menu-container">
+
+            <!-- HÀNG 1: CÁC CÔNG CỤ CHÍNH -->
+
+            <div class="hud-toolbar-row">
+
+                <button class="hud-tool-btn btn-master-align" id="btn-toan-job-can-chinh" title="Chạy quy trình tối ưu an toàn v2.0: Khóa kích thước Prior, khử lật góc 180°, bảo tồn dốc mặt đường, làm mượt quỹ đạo, dọn trùng lặp">
+
+                    🚀 Căn Chỉnh Toàn Diện
+
+                </button>
+
+                <button class="hud-tool-btn btn-ground" id="btn-toan-job-khop-duong" title="Bảo tồn cao độ đáy mặt đường thực tế và làm mượt chuỗi Z (Bảo toàn dốc tự nhiên)">
+
+                    🛣️ Khớp Mặt Đường
+
+                </button>
+
+                <button class="hud-tool-btn btn-body-fit" id="btn-toan-job-ep-sat" title="Ép viền vỏ xe và chuẩn hóa kích thước Prior">
+
+                    ✂️ Ép Sát Thân Xe
+
+                </button>
+
+                <button class="hud-tool-btn btn-point-scan" id="btn-toan-job-quet-outside" title="Tự động gán Outside cho các bước nhảy vị trí bất thường hoặc hộp lẻ">
+
+                    ⚡ Quét Outside
+
+                </button>
+
+                <button class="hud-tool-btn btn-point-scan" id="btn-toan-job-chua-lanh-outside" title="Bỏ đánh dấu Outside, phục hồi trạng thái Active cho các shape bị đánh dấu sai">
+
+                    ✨ Bỏ Outside
+
+                </button>
+
+                <button class="hud-tool-btn btn-yaw-flip" id="btn-toan-job-khu-lat-goc" title="Khử lỗi lật ngược đầu xe 180 độ trên toàn bộ tracks (Circular Median)">
+
+                    🔄 Khử Lật Góc 180°
+
+                </button>
+
+                <button class="hud-tool-btn btn-duplicate-scan" id="btn-toan-job-soi-trung" title="Quét và loại bỏ các hộp đè trùng nhau">
+
+                    🔍 Soi Trùng Lặp
+
+                </button>
+
+                <button class="hud-tool-btn btn-toggle-out" id="btn-toan-job-an-outside" title="Bật/Tắt ẩn các hộp đã đánh dấu Outside">
+
+                    👁️ Ẩn Outside
+
+                </button>
+
+            </div>
+
+
+
+            <!-- HÀNG 2: ĐIỀU KHIỂN & ĐỒNG BỘ TRACK ĐANG CHỌN -->
+
+            <div class="hud-track-row">
+
+                <div class="hud-track-group">
+
+                    <span class="hud-label-accent">🎯 Track:</span>
+
+                    <input type="number" class="hud-mini-input" id="inp-track-id" placeholder="ID" min="1" title="Track ID đang thao tác" />
+
+                    <button class="hud-btn-action" id="btn-lay-track-hien-tai" title="Đọc ID và kích thước từ vật thể đang chọn">🎯 Lấy Track</button>
+
+                    <button class="hud-btn-action hud-btn-detail" id="btn-mo-chi-tiet-track" title="Mở bảng Căn Chỉnh Toàn Bộ Chi Tiết từng frame với bộ vẽ Canvas 2D (Alt + E)">🔍 Chi Tiết Track</button>
+                    <button class="hud-btn-action btn-hud-can-track-don" id="btn-hud-can-track-don" title="Tự động căn chỉnh riêng Track này theo chuẩn Master Pipeline (Khớp đường, Khóa size, Ép vỏ xe 2cm)">🚀 Căn Track</button>
+                    <button class="hud-btn-action hud-btn-lock-track" id="btn-hud-lock-track" title="Khóa bảo vệ Track: Chống tất cả thuật toán tự động làm thay đổi kích thước/tọa độ đã chỉnh tay">🔓 Cho Phép Căn Chỉnh</button>
+
+                </div>
+
+
+
+                <div class="hud-dim-group">
+
+                    <span class="hud-dim-tag red">L</span>
+
+                    <input type="number" step="0.01" class="hud-dim-input" id="inp-dim-l" placeholder="4.33" />
+
+                    <span class="hud-dim-tag green">W</span>
+
+                    <input type="number" step="0.01" class="hud-dim-input" id="inp-dim-w" placeholder="1.90" />
+
+                    <span class="hud-dim-tag blue">H</span>
+
+                    <input type="number" step="0.01" class="hud-dim-input" id="inp-dim-h" placeholder="1.53" />
+
+                    <button class="hud-btn-success" id="btn-dong-bo-track-don" title="Đồng bộ kích thước này cho toàn bộ frame của Track (Alt + D)">
+
+                        🔄 Đồng Bộ Size
+
+                    </button>
+                    <button class="hud-btn-action hud-btn-lock-size" id="btn-hud-lock-size" title="Cấu hình Khóa Kích Thước chuyên sâu (Key Frame, L, W, H) - Giữ nguyên kích thước vẽ tay khi căn chỉnh">
+                        🔒 Khóa Size
+                    </button>
+
+                </div>
+
+
+
+                <div class="hud-nudge-group">
+
+                    <button class="hud-btn-primary" id="btn-dao-dau-xe" title="Đảo đầu xe 180 độ tại frame hiện tại (Alt + R)">
+
+                        🔄 Đảo 180°
+
+                    </button>
+
+                </div>
+
+
+
+                <button class="hud-btn-stats-toggle" id="btn-toan-job-thong-ke" title="Bật/Tắt bảng Thống Kê Chi Tiết">
+
+                    📊 Thống Kê ▾
+
+                </button>
+
+            </div>
+
+
+
+            <!-- BẢNG THỐNG KÊ CHI TIẾT -->
+
+            <div id="hud-stats-panel" class="hud-stats-panel" style="display: none;">
+
+                <div class="stats-grid">
+
+                    <div class="stats-card">
+
+                        <div class="stats-card-title">📌 THÔNG TIN JOB</div>
+
+                        <div class="stats-row"><span class="stats-label">Mã Job:</span><span class="stats-val cyan" id="stat-job-id">#--</span></div>
+
+                        <div class="stats-row"><span class="stats-label">Khung hình:</span><span class="stats-val green" id="stat-frames">0 / 60</span></div>
+
+                        <div class="stats-row"><span class="stats-label">Đủ 60 frame:</span><span class="stats-val purple" id="stat-complete-pct">-- %</span></div>
+
+                    </div>
+
+
+
+                    <div class="stats-card">
+
+                        <div class="stats-card-title">🎯 TRẠNG THÁI TRACKS</div>
+
+                        <div class="stats-row"><span class="stats-label">Tổng số Tracks:</span><span class="stats-val cyan" id="stat-total-tracks">--</span></div>
+
+                        <div class="stats-row"><span class="stats-label">Hoạt động (Active):</span><span class="stats-val green" id="stat-active-tracks">--</span></div>
+
+                        <div class="stats-row"><span class="stats-label">Đã gán Outside:</span><span class="stats-val amber" id="stat-outside-tracks">--</span></div>
+
+                    </div>
+
+
+
+                    <div class="stats-card">
+
+                        <div class="stats-card-title">🚗 PHÂN LOẠI ĐỐI TƯỢNG</div>
+
+                        <div class="stats-row"><span class="stats-label">🚗 Vehicles (Ô tô):</span><span class="stats-val cyan" id="stat-count-vehicles">--</span></div>
+
+                        <div class="stats-row"><span class="stats-label">🏍️ Two-Wheels (Xe máy):</span><span class="stats-val amber" id="stat-count-twowheels">--</span></div>
+
+                        <div class="stats-row"><span class="stats-label">🚶 Pedestrian (Người):</span><span class="stats-val green" id="stat-count-pedestrian">--</span></div>
+
+                    </div>
+
+                </div>
+
+
+
+                                                <!-- BỘ LỌC THỐNG KÊ (LOẠI XE & FRAMES) -->
+                <div class="stats-filter-bar">
+                    <div class="stats-filter-row">
+                        <!-- 1. Chọn Loại Xe -->
+                        <div class="filter-type-group">
+                            <span class="filter-group-title">🔍 Lọc:</span>
+                            <span class="filter-sub-title">Chọn loại xe:</span>
+                            <button class="btn-stats-filter-type active" data-type="all">Tất Cả</button>
+                            <button class="btn-stats-filter-type" data-type="vehicles">🚗 Vehicles</button>
+                            <button class="btn-stats-filter-type" data-type="two-wheels">🏍️ Two-Wheels</button>
+                            <button class="btn-stats-filter-type" data-type="pedestrian">🚶 Pedestrian</button>
+                        </div>
+
+                        <!-- 2. Chọn Frames -->
+                        <div class="filter-frame-group">
+                            <span class="filter-sub-title">Chọn frames:</span>
+                            <button class="btn-stats-frame-all active" id="btn-stats-frame-all" title="Xem danh sách đối tượng trên toàn bộ 60 frames của Job">Tất Cả Frames</button>
+                            <div class="stats-frame-picker-inline" id="stats-frame-picker-box">
+                                <button class="btn-stats-frame-step" id="btn-stats-frame-prev" title="Frame trước">◀</button>
+                                <div class="stats-frame-input-wrap">
+                                    <span class="stats-frame-prefix">Frame</span>
+                                    <input type="number" id="inp-stats-filter-frame" min="0" max="59" value="0" class="inp-stats-filter-frame" title="Nhập số frame cần lọc" />
+                                </div>
+                                <button class="btn-stats-frame-step" id="btn-stats-frame-next" title="Frame tiếp theo">▶</button>
+                                <button class="btn-stats-frame-sync" id="btn-stats-frame-cur-cvat" title="Lấy nhanh số frame đang phát trên timeline CVAT">
+                                    ⏱️ Theo CVAT (<span id="stats-val-cur-cvat-frame">0</span>)
+                                </button>
+                                <label class="stats-filter-chk-label" title="Chỉ hiện các track đang hoạt động (ẩn các xe bị gắn cờ Outside tại frame này)">
+                                    <input type="checkbox" id="chk-stats-frame-active-only" checked />
+                                    <span>Chỉ Active</span>
+                                </label>
+                            </div>
+                            <button class="btn-stats-reset-all" id="btn-stats-reset-all" title="Khôi phục toàn bộ bộ lọc về mặc định">🔄 Đặt Lại</button>
+                        </div>
+                    </div>
+                    <div id="stats-filter-status-banner" class="stats-filter-status-banner" style="display: none;">
+                        <span id="stats-filter-status-text">Đang lọc: ...</span>
+                    </div>
+                </div>
+
+                <div class="stats-detail-section">
+                    <div class="stats-class-box vehicle">
+                        <div class="stats-class-header">
+                            <span class="stats-class-title cyan" id="stat-title-vehicles">🚗 Vehicles (<span id="stat-list-vehicles-count">0</span> tracks) — <i>Bấm vào ID để chọn ngay:</i></span>
+                            <button class="stats-copy-btn cyan" id="btn-copy-vehicles-ids">📋 Chọn Tất Cả</button>
+                        </div>
+                        <div class="stats-chips-container" id="stat-chips-vehicles"></div>
+                    </div>
+
+                    <div class="stats-class-box twowheel">
+                        <div class="stats-class-header">
+                            <span class="stats-class-title amber" id="stat-title-twowheels">🏍️ Two-Wheels (<span id="stat-list-twowheels-count">0</span> tracks):</span>
+                            <button class="stats-copy-btn amber" id="btn-copy-twowheels-ids">📋 Chọn Tất Cả</button>
+                        </div>
+                        <div class="stats-chips-container" id="stat-chips-twowheels"></div>
+                    </div>
+
+                    <div class="stats-class-box pedestrian">
+                        <div class="stats-class-header">
+                            <span class="stats-class-title green" id="stat-title-pedestrian">🚶 Pedestrian (<span id="stat-list-pedestrian-count">0</span> tracks):</span>
+                            <button class="stats-copy-btn green" id="btn-copy-pedestrian-ids">📋 Chọn Tất Cả</button>
+                        </div>
+                        <div class="stats-chips-container" id="stat-chips-pedestrian"></div>
+                    </div>
+                </div>
+
+
+
+            <!-- THANH TRẠNG THÁI -->
+
+            <div class="hud-status-bar">
+
+                <span class="hud-status-text" id="hud-status-message">⚡ CVAT 3D Toolbar v2.6.2 • Sẵn sàng thao tác</span>
+
+                <span class="hud-status-counts" id="hud-stats-summary">-- Tracks • -- Frames</span>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<!-- NÚT PILL THU GỌN NỔI ĐỘC LẬP (DRAGGABLE - KHÔNG BỊ TRÓI Ở GIỮA MÀN HÌNH) -->
+
+<div id="cvat-3d-assistant-badge" style="display: none;">
+
+    <span class="badge-drag-dot">⋮⋮</span>
+
+    <span class="badge-logo">⚡</span>
+
+    <span class="badge-title">CVAT 3D</span>
+
+</div>
+
+
+
+<!-- MODAL CĂN CHỈNH TOÀN BỘ CHI TIẾT (ĐỒNG BỘ CHUẨN EXE) -->
+
+<div id="cvat-detail-modal" class="cvat-modal-overlay" style="display: none;">
+
+    <div class="cvat-modal-dialog">
+
+        <!-- Modal Top Bar -->
+
+        <div class="modal-top-bar" id="modal-drag-header">
+
+            <div class="modal-title-left">
+                <div class="modal-title-top-row">
+                    <span class="modal-icon">🎯</span>
+                    <span class="modal-title" id="modal-track-title" style="display:inline-flex;align-items:center;gap:4px;">
+                        <span>CĂN CHỈNH CHI TIẾT TRACK</span>
+                        <span class="modal-track-id-editor" title="Nhập ID Track hoặc bấm ◀ ▶ để chuyển nhanh giữa các Track">
+                            <span style="color:#38bdf8;font-weight:900;font-size:13px;">#</span>
+                            <button type="button" class="btn-header-track-step" id="modal-btn-prev-track" title="Track trước">◀</button>
+                            <input type="number" id="modal-inp-header-track-id" class="inp-header-track-id" min="1" value="1" title="Nhập số Track ID rồi nhấn Enter để chuyển ngay" />
+                            <button type="button" class="btn-header-track-step" id="modal-btn-next-track" title="Track tiếp theo">▶</button>
+                        </span>
+                        <span id="modal-track-frames-count">(10 FRAMES)</span>
+                    </span>
+                </div>
+                <div class="modal-track-meta-row">
+                    <span id="modal-track-label-badge" class="badge-track-label">[vehicles]</span>
+                    <div id="modal-track-attr-container" style="display: inline-flex; align-items: center; gap: 6px;"></div>
+                </div>
+            </div>
+
+            <div class="modal-actions-right">
+
+                <!-- WRAPPER NÚT TỰ ĐỘNG CĂN TRACK & POPOVER CỠ PHÓNG ĐẠI -->
+                <div class="modal-auto-align-wrap" style="position: relative; display: inline-flex; align-items: center;">
+                    <button class="btn-m-action btn-m-auto-align" id="modal-btn-auto-align" title="Bấm để chọn Cỡ Phóng Đại (1.0x - 2.0x) và tự động căn chỉnh track này">
+                        🚀 Auto fit box ▾
+                    </button>
+                    <!-- POPOVER CỠ PHÓNG ĐẠI QUÉT XỔ XUỐNG DƯỚI NÚT -->
+                    <div class="modal-scale-popover" id="modal-scale-popover" style="display: none;">
+                        <div class="scale-pop-header">
+                            <span class="scale-pop-title">📐 CỠ PHÓNG ĐẠI QUÉT</span>
+                            <span class="scale-pop-badge" id="modal-scale-pop-badge">1.0x</span>
+                        </div>
+                        <div class="scale-pop-control-row">
+                            <button class="btn-scale-arrow" id="modal-btn-scale-dec" title="Giảm 0.1">◀</button>
+                            <input type="number" id="modal-inp-scan-scale" min="1.0" max="2.0" step="0.1" value="1.0" class="inp-scale-num" />
+                            <button class="btn-scale-arrow" id="modal-btn-scale-inc" title="Tăng 0.1">▶</button>
+                        </div>
+                        <div class="scale-pop-desc" id="modal-scale-pop-desc">
+                            🟢 <b>1.0x:</b> Ôm sát vỏ xe (±10cm), an toàn tuyệt đối chống hút bờ tường, dải phân cách, xe sát bên.
+                        </div>
+                        <div class="scale-pop-quick-chips">
+                            <button class="scale-chip active" data-val="1.0">1.0x</button>
+                            <button class="scale-chip" data-val="1.2">1.2x</button>
+                            <button class="scale-chip" data-val="1.5">1.5x</button>
+                            <button class="scale-chip" data-val="2.0">2.0x</button>
+                        </div>
+                        <button class="btn-scale-exec" id="modal-btn-do-auto-align">
+                            ⚡ Bắt Đầu Căn Track
+                        </button>
+                    </div>
+                </div>
+
+                <button class="btn-m-action" id="modal-btn-range" title="Mở hộp thoại chọn khoảng frames thông minh">
+
+                    📊 Chọn Khoảng
+
+                </button>
+
+                <button class="btn-m-action" id="modal-btn-select-all" title="Bật/Tắt chọn tất cả các frames">
+
+                    ☑️ Chọn Cả
+
+                </button>
+
+                <button class="btn-m-action btn-m-scan-out" id="modal-btn-scan-out" title="Đánh dấu Outside cho các frame đã chọn hoặc frame bất thường">
+
+                    🪄 Quét Outside
+
+                </button>
+
+                <button class="btn-m-action" id="modal-btn-clear-out" title="Phục hồi trạng thái Active cho các frame đã chọn">
+
+                    ✨ Bỏ Outside
+
+                </button>
+
+                <button class="btn-m-action" id="modal-btn-opacity" title="Bật/Tắt chế độ nhìn xuyên thấu qua giao diện CVAT bên dưới">👁️ Trong Suốt</button>
+
+                <button class="btn-m-icon" id="modal-btn-undo" title="Hoàn tác thao tác trước (Undo)">↩</button>
+
+                <button class="btn-m-icon" id="modal-btn-redo" title="Làm lại thao tác vừa hủy (Redo)">↪</button>
+
+                <button class="btn-m-action btn-m-save" id="modal-btn-save" title="Lưu các thay đổi lên máy chủ CVAT và đóng cửa sổ">
+
+                    💾 Áp Dụng & Lưu
+
+                </button>
+
+                <button class="btn-m-action btn-m-restore" id="modal-btn-restore" style="display:none;background:#22c55e;color:#fff;border:1px solid #4ade80;border-radius:4px;padding:4px 12px;font-weight:bold;cursor:pointer;font-size:12px;box-shadow:0 0 10px rgba(34,197,94,0.5);" title="Phóng to modal lại kích thước đầy đủ (hoặc phím M)">🗖 Phóng To</button>
+                <button class="btn-m-icon btn-m-minimize" id="modal-btn-minimize" title="Thu nhỏ modal thành thanh nổi ở góc (hoặc phím M)">➖</button>
+                <button class="btn-m-icon btn-m-close" id="modal-btn-close" title="Đóng cửa sổ">✕</button>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- Banner Hướng Dẫn & Thông Báo Tịnh Tiến Kéo Thả Trực Quan -->
+
+                <!-- Banner Hướng Dẫn & Thanh Chỉnh Kích Thước Trực Quan -->
+        <div class="modal-sub-bar" id="modal-sub-bar">
+            <div class="modal-size-toolbar" id="modal-size-toolbar" style="width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: nowrap; overflow-x: auto;">
+                <div style="display: flex; align-items: center; gap: 8px; flex-wrap: nowrap; white-space: nowrap; flex-shrink: 0;">
+                    <span class="size-tb-title" style="font-weight: 800; color: #38bdf8; white-space: nowrap;">📐 Kích Thước:</span>
+                    <div class="size-field" style="display: flex; align-items: center; gap: 2px;">
+                        <label style="font-size: 11px; font-weight: bold;">Dài (L):</label>
+                        <button class="btn-size-step" data-dim="L" data-dir="-1" title="Giảm 5cm">-</button>
+                        <input type="number" id="modal-inp-size-L" step="0.05" min="0.2" max="25" value="4.33" style="width: 48px; text-align: center;" />
+                        <button class="btn-size-step" data-dim="L" data-dir="1" title="Tăng 5cm">+</button>
+                        <button class="btn-lock-dim" id="modal-btn-lock-l" data-dim="l" title="Khóa chiều Dài (L)" style="background:#1e293b;color:#94a3b8;border:1px solid #475569;border-radius:3px;padding:2px 5px;margin-left:2px;font-size:11px;cursor:pointer;">🔓</button>
+                    </div>
+                    <div class="size-field" style="display: flex; align-items: center; gap: 2px;">
+                        <label style="font-size: 11px; font-weight: bold;">Rộng (W):</label>
+                        <button class="btn-size-step" data-dim="W" data-dir="-1" title="Giảm 5cm">-</button>
+                        <input type="number" id="modal-inp-size-W" step="0.05" min="0.2" max="10" value="1.90" style="width: 48px; text-align: center;" />
+                        <button class="btn-size-step" data-dim="W" data-dir="1" title="Tăng 5cm">+</button>
+                        <button class="btn-lock-dim" id="modal-btn-lock-w" data-dim="w" title="Khóa chiều Rộng (W)" style="background:#1e293b;color:#94a3b8;border:1px solid #475569;border-radius:3px;padding:2px 5px;margin-left:2px;font-size:11px;cursor:pointer;">🔓</button>
+                    </div>
+                    <div class="size-field" style="display: flex; align-items: center; gap: 2px;">
+                        <label style="font-size: 11px; font-weight: bold;">Cao (H):</label>
+                        <button class="btn-size-step" data-dim="H" data-dir="-1" title="Giảm 5cm">-</button>
+                        <input type="number" id="modal-inp-size-H" step="0.05" min="0.2" max="10" value="1.53" style="width: 48px; text-align: center;" />
+                        <button class="btn-size-step" data-dim="H" data-dir="1" title="Tăng 5cm">+</button>
+                        <button class="btn-lock-dim" id="modal-btn-lock-h" data-dim="h" title="Khóa chiều Cao (H)" style="background:#1e293b;color:#94a3b8;border:1px solid #475569;border-radius:3px;padding:2px 5px;margin-left:2px;font-size:11px;cursor:pointer;">🔓</button>
+                    </div>
+                </div>
+                <div style="display: flex; align-items: center; gap: 8px; flex-wrap: nowrap; white-space: nowrap; flex-shrink: 0;">
+                    <div class="size-field" style="gap: 5px;">
+                        <label style="color: #38bdf8; font-weight: bold; white-space: nowrap;">🎯 Chọn Frame:</label>
+                        <select id="modal-sel-frame-size" style="background:#0f172a;color:#f8fafc;border:1px solid #38bdf8;border-radius:4px;padding:3px 6px;font-size:11px;font-weight:bold;cursor:pointer;">
+                        </select>
+                    </div>
+                    <button class="btn-size-apply" id="modal-btn-apply-size" title="Đồng bộ kích thước đang chọn cho toàn bộ 60 frames" style="background:#0284c7;color:#fff;border:none;border-radius:4px;padding:4px 10px;font-weight:bold;cursor:pointer;display:flex;align-items:center;gap:4px;white-space:nowrap;">🔄 Đồng Bộ Size</button>
+                    <button class="btn-lock-track" id="modal-btn-lock-track" style="background:#334155;color:#94a3b8;border:1px solid #475569;border-radius:4px;padding:4px 8px;font-weight:bold;font-size:11px;cursor:pointer;white-space:nowrap;" title="Khóa bảo vệ Track: Chống thuật toán can thiệp làm bóp méo hình vẽ tay">🔓 Cho Phép Căn Chỉnh</button>
+                    <div class="size-field" style="gap: 4px; padding: 2px 6px; background: rgba(30, 41, 59, 0.85); border: 1px solid #38bdf8; border-radius: 4px; white-space: nowrap;" title="Điều chỉnh kích thước hạt điểm LiDAR (PP) từ 0.6px đến 3.0px (không bị nhòe to khi zoom)">
+                        <label style="color: #cbd5e1; font-weight: bold; font-size: 11px; white-space: nowrap;">✨ Cỡ Điểm:</label>
+                        <button class="btn-pt-size-step" id="modal-btn-pt-size-dec" title="Giảm cỡ điểm (nhỏ gọn, sắc nét hơn)" style="padding: 1px 6px; font-weight: bold; cursor: pointer; background: #1e293b; color: #38bdf8; border: 1px solid #475569; border-radius: 3px;">-</button>
+                        <span id="modal-lbl-pt-size" style="color: #38bdf8; font-weight: bold; font-size: 11px; min-width: 32px; text-align: center;">1.3px</span>
+                        <button class="btn-pt-size-step" id="modal-btn-pt-size-inc" title="Tăng cỡ điểm" style="padding: 1px 6px; font-weight: bold; cursor: pointer; background: #1e293b; color: #38bdf8; border: 1px solid #475569; border-radius: 3px;">+</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal Column Headers -->
+        <div class="modal-col-headers">
+            <div class="col-head col-head-meta">FRAME</div>
+            <div class="col-head col-head-top">TOP</div>
+            <div class="col-head col-head-side">SIDE</div>
+            <div class="col-head col-head-front">FRONT</div>
+        </div>
+
+
+
+        <!-- Modal Rows Container (Cuộn dọc) -->
+
+        <div class="modal-rows-container" id="modal-rows-list">
+
+            <!-- Render động từng frame bằng Canvas 2D Vector Projection -->
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<!-- POPUP CẤU HÌNH KHÓA KÍCH THƯỚC (CHUẨN BangCauHinhKhoaKichThuoc) -->
+<div id="cvat-lock-size-popup" class="cvat-popup-overlay" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 9999999; justify-content: center; align-items: center;">
+    <div class="cvat-popup-card" style="width: 400px; background: #0f172a; border: 1px solid #334155; border-radius: 8px; padding: 18px; box-shadow: 0 10px 25px rgba(0,0,0,0.8); color: #f8fafc; font-family: sans-serif;">
+        <div style="font-size: 14px; font-weight: bold; color: #f59e0b; margin-bottom: 6px;">🔒 Cấu Hình Khóa Kích Thước Track</div>
+        <div style="font-size: 11px; color: #94a3b8; margin-bottom: 12px;">Chọn frame ảnh mẫu và tích chọn các chiều muốn khóa cố định khi chạy căn chỉnh:</div>
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+            <div style="display: flex; align-items: center; justify-content: space-between;">
+                <span style="font-size: 11px; font-weight: bold; color: #38bdf8;">📸 Frame Mẫu (Key Frame):</span>
+                <input type="number" id="lock-pop-kf" min="0" max="1000" value="0" style="width: 80px; padding: 4px 6px; background: #1e293b; border: 1px solid #475569; color: #f8fafc; border-radius: 4px; font-weight: bold;" />
+            </div>
+            <div style="display: flex; align-items: center; gap: 8px;">
+                <span style="font-size: 11px; font-weight: bold; color: #ef4444; width: 50px;">Dài (L):</span>
+                <input type="number" id="lock-pop-l" step="0.05" min="0.1" max="50" value="4.33" style="flex: 1; padding: 4px 6px; background: #1e293b; border: 1px solid #475569; color: #f8fafc; border-radius: 4px; font-weight: bold;" />
+                <label style="font-size: 11px; font-weight: bold; color: #ef4444; display: flex; align-items: center; gap: 4px; cursor: pointer;">
+                    <input type="checkbox" id="lock-pop-chk-l" checked /> 🔒 Khóa L
+                </label>
+            </div>
+            <div style="display: flex; align-items: center; gap: 8px;">
+                <span style="font-size: 11px; font-weight: bold; color: #22c55e; width: 50px;">Rộng (W):</span>
+                <input type="number" id="lock-pop-w" step="0.05" min="0.1" max="50" value="1.90" style="flex: 1; padding: 4px 6px; background: #1e293b; border: 1px solid #475569; color: #f8fafc; border-radius: 4px; font-weight: bold;" />
+                <label style="font-size: 11px; font-weight: bold; color: #22c55e; display: flex; align-items: center; gap: 4px; cursor: pointer;">
+                    <input type="checkbox" id="lock-pop-chk-w" checked /> 🔒 Khóa W
+                </label>
+            </div>
+            <div style="display: flex; align-items: center; gap: 8px;">
+                <span style="font-size: 11px; font-weight: bold; color: #38bdf8; width: 50px;">Cao (H):</span>
+                <input type="number" id="lock-pop-h" step="0.05" min="0.1" max="50" value="1.53" style="flex: 1; padding: 4px 6px; background: #1e293b; border: 1px solid #475569; color: #f8fafc; border-radius: 4px; font-weight: bold;" />
+                <label style="font-size: 11px; font-weight: bold; color: #38bdf8; display: flex; align-items: center; gap: 4px; cursor: pointer;">
+                    <input type="checkbox" id="lock-pop-chk-h" checked /> 🔒 Khóa H
+                </label>
+            </div>
+        </div>
+        <div style="display: flex; gap: 6px; margin-top: 14px;">
+            <button id="lock-pop-btn-ok" style="flex: 2; background: #16a34a; color: white; padding: 7px 12px; border-radius: 4px; font-size: 11px; font-weight: bold; border: none; cursor: pointer;">✓ Xác Nhận</button>
+            <button id="lock-pop-btn-unlock" style="flex: 1.2; background: #334155; color: #cbd5e1; padding: 7px 8px; border-radius: 4px; font-size: 11px; font-weight: bold; border: none; cursor: pointer;">🔓 Mở Khóa Cả 3</button>
+            <button id="lock-pop-btn-cancel" style="flex: 1; background: #1e293b; color: #94a3b8; border: 1px solid #334155; padding: 7px 10px; border-radius: 4px; font-size: 11px; cursor: pointer;">✕ Đóng</button>
+        </div>
+    </div>
+</div>
+
+<!-- POPUP CHỌN KHOẢNG FRAMES ĐA MIỀN (CHUẨN EXE CuaSoChonKhoangFrames) -->
+<div id="cvat-range-popup" class="cvat-popup-overlay" style="display: none;">
+    <div class="cvat-popup-card" style="width: 440px; background: #0f172a; border: 1px solid #334155; border-radius: 8px; padding: 18px; box-shadow: 0 10px 25px rgba(0,0,0,0.6);">
+        <div class="popup-title" style="font-size: 14px; font-weight: 700; color: #38bdf8; margin-bottom: 8px;">🔢 Chọn Khoảng Frames Đa Miền</div>
+        <div class="popup-guide" id="popup-range-guide" style="font-size: 11px; color: #94a3b8; margin-bottom: 10px;">Track có 60 frames (từ frame 0 đến 59):</div>
+        <div class="popup-form" style="display: flex; flex-direction: column; gap: 8px;">
+            <label style="font-size: 11px; color: #cbd5e1; font-weight: 600;">Nhập danh sách khoảng frames (ngăn cách bằng dấu phẩy):</label>
+            <input type="text" id="popup-inp-ranges" placeholder="Ví dụ: 0-10, 15, 20..35" style="width: 100%; padding: 8px 10px; background: #1e293b; border: 1px solid #334155; color: #38bdf8; border-radius: 4px; font-weight: bold; font-size: 12px;" />
+            <div id="popup-preview-label" style="font-size: 11px; color: #38bdf8; min-height: 16px;">💡 Gõ khoảng frames để xem trước kết quả...</div>
+        </div>
+        <div class="popup-actions" style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 14px;">
+            <button class="btn-p-action btn-p-primary" id="popup-btn-replace" style="background: #0284c7; color: white; padding: 7px 10px; border-radius: 4px; font-size: 11px; font-weight: bold; border: none; cursor: pointer;">☑️ Áp Dụng (Chỉ Chọn Khoảng Này)</button>
+            <button class="btn-p-action btn-p-secondary" id="popup-btn-add" style="background: #0d9488; color: white; padding: 7px 10px; border-radius: 4px; font-size: 11px; font-weight: bold; border: none; cursor: pointer;">➕ Thêm Vào Đang Chọn</button>
+            <button class="btn-p-action" id="popup-btn-sub" style="background: #b45309; color: white; padding: 7px 10px; border-radius: 4px; font-size: 11px; font-weight: bold; border: none; cursor: pointer;">➖ Bớt Khỏi Đang Chọn</button>
+            <button class="btn-p-action" id="popup-btn-all" style="background: #2563eb; color: white; padding: 7px 10px; border-radius: 4px; font-size: 11px; font-weight: bold; border: none; cursor: pointer;">☑️ Chọn Cả (Ctrl+A)</button>
+            <button class="btn-p-action" id="popup-btn-none" style="background: #334155; color: #e2e8f0; padding: 7px 10px; border-radius: 4px; font-size: 11px; font-weight: bold; border: none; cursor: pointer;">⬜ Bỏ Chọn Cả</button>
+            <button class="btn-p-action btn-p-cancel" id="popup-btn-cancel" style="background: #475569; color: white; padding: 7px 10px; border-radius: 4px; font-size: 11px; font-weight: bold; border: none; cursor: pointer;">❌ Đóng</button>
+        </div>
+    </div>
+</div>
+
+
+
+<!-- Toast Popup Thông Báo Nhanh -->
+
+<div id="cvat-3d-toast">Đã thực hiện xong!</div>
+
+<!-- FLOATING QUICK TRACK LOCK BADGE -->
+<div id="cvat-quick-track-lock-badge" style="display: none;">
+    <span id="quick-badge-title" style="font-weight: 700; color: #38bdf8;">🎯 Track #--</span>
+    <span id="quick-badge-dims" style="color: #94a3b8; font-weight: 600;">4.33 x 1.90 x 1.53m</span>
+    <button id="quick-badge-btn-lock-track" class="hud-btn-lock-track" title="Khóa bảo vệ Track này">🔓 Khóa Track</button>
+    <button id="quick-badge-btn-lock-size" class="hud-btn-lock-size" title="Cấu hình Khóa Kích Thước">📐 Khóa Size</button>
+</div>
+
+<!-- POPUP BÁO CÁO HOÀN TẤT CĂN CHỈNH TOÀN DIỆN (CHUẨN DESKTOP APP) -->
+<div id="cvat-finish-report-modal" class="cvat-popup-overlay" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.75); z-index: 99999999; justify-content: center; align-items: center;">
+    <div class="cvat-popup-card" style="width: 480px; background: #0f172a; border: 1px solid #334155; border-radius: 10px; padding: 22px; box-shadow: 0 15px 35px rgba(0,0,0,0.85); color: #f8fafc; font-family: sans-serif;">
+        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 14px;">
+            <div style="width: 40px; height: 40px; border-radius: 50%; background: #0284c7; display: flex; align-items: center; justify-content: center; font-size: 20px; font-weight: bold; color: white;">ℹ️</div>
+            <div>
+                <div style="font-size: 15px; font-weight: bold; color: #38bdf8;">🎉 HOÀN TẤT CĂN CHỈNH TOÀN DIỆN CHO TOÀN BỘ JOB!</div>
+                <div style="font-size: 11px; color: #94a3b8;">Thuật toán Master Pipeline đã đồng bộ hóa và bảo toàn cấu trúc dữ liệu.</div>
+            </div>
+        </div>
+        <div id="finish-report-content" style="background: #1e293b; border-radius: 6px; padding: 12px 14px; font-size: 12px; line-height: 1.8; color: #cbd5e1; border-left: 4px solid #0ea5e9;">
+            <!-- Điền động -->
+        </div>
+        <div style="margin-top: 14px; font-size: 11px; color: #a5f3fc; background: rgba(14, 165, 233, 0.1); padding: 8px 12px; border-radius: 6px; border: 1px solid rgba(14, 165, 233, 0.2);">
+            ✨ Tất cả các hình hộp đã được khóa phẳng đáy mặt đường và ôm khít vỏ xe đón tia!
+        </div>
+        <div style="display: flex; justify-content: flex-end; margin-top: 16px;">
+            <button id="finish-report-btn-close" style="background: #0284c7; color: white; border: none; padding: 7px 24px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 12px;">OK</button>
+        </div>
+    </div>
+</div>

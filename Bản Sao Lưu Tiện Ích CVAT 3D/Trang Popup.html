@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Khung Menu CVAT 3D</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            width: 360px;
+            background: #0b0f19;
+            color: #f8fafc;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            font-size: 11px;
+            user-select: none;
+        }
+        .header {
+            background: #0f172a;
+            padding: 10px 12px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid rgba(56, 189, 248, 0.25);
+        }
+        .header-title {
+            font-weight: 800;
+            font-size: 13px;
+            color: #38bdf8;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            letter-spacing: 0.5px;
+        }
+        .header-status {
+            font-size: 10px;
+            color: #34d399;
+            background: rgba(16, 185, 129, 0.15);
+            border: 1px solid rgba(16, 185, 129, 0.4);
+            padding: 2px 7px;
+            border-radius: 10px;
+            font-weight: 700;
+        }
+        .content {
+            padding: 10px 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            max-height: 520px;
+            overflow-y: auto;
+        }
+        .group-card {
+            background: rgba(30, 41, 59, 0.6);
+            border: 1px solid rgba(56, 189, 248, 0.2);
+            border-radius: 6px;
+            padding: 8px 10px;
+        }
+        .group-badge {
+            font-size: 10px;
+            font-weight: 800;
+            color: #38bdf8;
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .tool-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6px;
+        }
+        .tool-btn {
+            border-radius: 4px;
+            padding: 6px 8px;
+            font-size: 10.5px;
+            font-weight: 700;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.15s;
+            outline: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            white-space: nowrap;
+        }
+        .tool-btn:hover {
+            transform: translateY(-1px);
+        }
+        /* Color variants */
+        .btn-green {
+            background: rgba(16, 185, 129, 0.2);
+            border: 1.5px solid #10b981;
+            color: #34d399;
+        }
+        .btn-green:hover { background: rgba(16, 185, 129, 0.35); color: #fff; }
+
+        .btn-cyan {
+            background: rgba(14, 165, 233, 0.2);
+            border: 1.5px solid #0284c7;
+            color: #38bdf8;
+        }
+        .btn-cyan:hover { background: rgba(14, 165, 233, 0.35); color: #fff; }
+
+        .btn-purple {
+            background: rgba(168, 85, 247, 0.2);
+            border: 1.5px solid #9333ea;
+            color: #c084fc;
+        }
+        .btn-purple:hover { background: rgba(168, 85, 247, 0.35); color: #fff; }
+
+        .btn-amber {
+            background: rgba(245, 158, 11, 0.2);
+            border: 1.5px solid #d97706;
+            color: #fbbf24;
+        }
+        .btn-amber:hover { background: rgba(245, 158, 11, 0.35); color: #fff; }
+
+        .btn-blue {
+            background: rgba(59, 130, 246, 0.2);
+            border: 1.5px solid #2563eb;
+            color: #60a5fa;
+        }
+        .btn-blue:hover { background: rgba(59, 130, 246, 0.35); color: #fff; }
+
+        .btn-rose {
+            background: rgba(225, 29, 72, 0.2);
+            border: 1.5px solid #e11d48;
+            color: #fb7185;
+        }
+        .btn-rose:hover { background: rgba(225, 29, 72, 0.35); color: #fff; }
+
+        .btn-slate {
+            background: rgba(71, 85, 105, 0.3);
+            border: 1.5px solid #64748b;
+            color: #cbd5e1;
+        }
+        .btn-slate:hover { background: rgba(71, 85, 105, 0.5); color: #fff; }
+
+        /* Track Controls */
+        .row {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: 6px;
+        }
+        .row:last-child { margin-bottom: 0; }
+        .label {
+            font-size: 11px;
+            font-weight: 700;
+            color: #94a3b8;
+            min-width: 55px;
+        }
+        .input-mini {
+            background: #0f172a;
+            border: 1px solid #475569;
+            border-radius: 4px;
+            color: #38bdf8;
+            padding: 4px 6px;
+            font-size: 11px;
+            font-weight: 800;
+            width: 60px;
+            text-align: center;
+            outline: none;
+        }
+        .input-mini:focus { border-color: #38bdf8; }
+        .input-group {
+            background: #0f172a;
+            border: 1px solid #475569;
+            border-radius: 4px;
+            color: #f8fafc;
+            padding: 4px 6px;
+            font-size: 11px;
+            font-weight: 700;
+            flex: 1;
+            outline: none;
+        }
+        .dim-inputs {
+            display: flex;
+            gap: 4px;
+            flex: 1;
+        }
+        .dim-input {
+            width: 100%;
+            background: #0f172a;
+            border: 1px solid #475569;
+            border-radius: 4px;
+            color: #f8fafc;
+            padding: 4px 2px;
+            font-size: 11px;
+            font-weight: 700;
+            text-align: center;
+            outline: none;
+        }
+        .dim-input:focus { border-color: #38bdf8; }
+        .btn-small {
+            background: #1e293b;
+            border: 1px solid #475569;
+            color: #38bdf8;
+            border-radius: 3px;
+            padding: 3px 6px;
+            font-size: 10px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+        .btn-small:hover { background: #334155; color: #fff; }
+
+        .btn-block-action {
+            width: 100%;
+            background: rgba(16, 185, 129, 0.25);
+            border: 1px solid #10b981;
+            color: #34d399;
+            border-radius: 4px;
+            padding: 6px;
+            font-size: 11px;
+            font-weight: 800;
+            cursor: pointer;
+            margin-top: 6px;
+            transition: all 0.15s;
+        }
+        .btn-block-action:hover {
+            background: rgba(16, 185, 129, 0.45);
+            color: #fff;
+        }
+
+        .status-box {
+            background: #0f172a;
+            border: 1px solid #334155;
+            border-radius: 4px;
+            padding: 6px 8px;
+            font-size: 10px;
+            color: #94a3b8;
+            text-align: center;
+        }
+        .status-box span { color: #38bdf8; font-weight: 700; }
+    
+        /* Chips Badge */
+        .hud-chip {
+            padding: 1px 5px;
+            font-size: 9.5px;
+            font-weight: 700;
+            font-family: monospace;
+            border-radius: 3px;
+            cursor: pointer;
+            transition: all 0.12s;
+            display: inline-flex;
+            align-items: center;
+        }
+        .hud-chip:hover {
+            transform: scale(1.06);
+        }
+        .hud-chip.vehicle {
+            background: rgba(56, 189, 248, 0.15);
+            border: 1px solid rgba(56, 189, 248, 0.4);
+            color: #7dd3fc;
+        }
+        .hud-chip.twowheel {
+            background: rgba(251, 191, 36, 0.15);
+            border: 1px solid rgba(251, 191, 36, 0.4);
+            color: #fde68a;
+        }
+        .hud-chip.pedestrian {
+            background: rgba(52, 211, 153, 0.15);
+            border: 1px solid rgba(52, 211, 153, 0.4);
+            color: #a7f3d0;
+        }
+        .hud-chip.active-chip {
+            outline: 1.5px solid #fff;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-title">
+            <span>⚡</span>
+            <span>CVAT 3D TOOLBAR</span>
+        </div>
+        <div class="header-status" id="header-status">Đang kết nối...</div>
+    </div>
+
+    <div class="content">
+        <!-- KHUNG 0: THỐNG KÊ NHANH (CHUẨN BẢN EXE) -->
+        <div class="group-card" id="popup-stats-card">
+            <div class="group-badge">
+                <span>📊 THỐNG KÊ JOB</span>
+                <span id="popup-stat-job-badge" style="color: #38bdf8; font-size: 9px; font-weight: 800;">Đang kết nối...</span>
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 4px; font-size: 10px;">
+                <div style="background: rgba(0,0,0,0.3); padding: 4px 6px; border-radius: 4px;">
+                    <span style="color: #94a3b8;">Tổng Tracks:</span> <b id="popup-stat-total" style="color: #38bdf8;">--</b>
+                </div>
+                <div style="background: rgba(0,0,0,0.3); padding: 4px 6px; border-radius: 4px;">
+                    <span style="color: #94a3b8;">Hoàn chỉnh:</span> <b id="popup-stat-complete" style="color: #c084fc;">--</b>
+                </div>
+                <div style="background: rgba(0,0,0,0.3); padding: 4px 6px; border-radius: 4px;">
+                    <span style="color: #94a3b8;">Active / Out:</span> <b id="popup-stat-active-out" style="color: #34d399;">-- / --</b>
+                </div>
+                <div style="background: rgba(0,0,0,0.3); padding: 4px 6px; border-radius: 4px;">
+                    <span style="color: #94a3b8;">Veh / Two / Ped:</span> <b id="popup-stat-classes" style="color: #fbbf24;">--</b>
+                </div>
+            </div>
+            <!-- Danh sách chi tiết Track ID (Bấm để chọn ngay) -->
+            <div id="popup-detailed-stats" style="margin-top: 6px; border-top: 1px dashed rgba(56,189,248,0.25); padding-top: 6px; display: flex; flex-direction: column; gap: 4px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; font-size: 9.5px; color: #38bdf8; font-weight: 700;">
+                    <span>🚗 Vehicles (<span id="popup-veh-count">0</span>):</span>
+                    <span style="font-size: 8.5px; color: #94a3b8; font-style: italic;">Bấm ID để chọn</span>
+                </div>
+                <div id="popup-chips-vehicles" style="display: flex; flex-wrap: wrap; gap: 3px; max-height: 50px; overflow-y: auto;"></div>
+                
+                <div style="font-size: 9.5px; color: #fbbf24; font-weight: 700; margin-top: 2px;">
+                    🏍️ Two-Wheels (<span id="popup-two-count">0</span>):
+                </div>
+                <div id="popup-chips-twowheels" style="display: flex; flex-wrap: wrap; gap: 3px; max-height: 50px; overflow-y: auto;"></div>
+
+                <div style="font-size: 9.5px; color: #34d399; font-weight: 700; margin-top: 2px;">
+                    🚶 Pedestrian (<span id="popup-ped-count">0</span>):
+                </div>
+                <div id="popup-chips-pedestrian" style="display: flex; flex-wrap: wrap; gap: 3px; max-height: 50px; overflow-y: auto;"></div>
+            </div>
+        </div>
+
+        <!-- KHUNG 1: CÁC CÔNG CỤ CHÍNH -->
+        <div class="group-card">
+            <div class="group-badge">
+                <span>🛠️ CÔNG CỤ CĂN CHỈNH</span>
+                <span id="popup-frames-badge" style="color: #64748b; font-size: 9px;">60 FRAMES</span>
+            </div>
+            <div class="tool-grid">
+                <button class="tool-btn btn-green" id="popup-btn-master" style="grid-column: span 2;">
+                    🚀 Căn Chỉnh Toàn Diện
+                </button>
+                <button class="tool-btn btn-cyan" id="popup-btn-ground">
+                    🛣️ Khớp Mặt Đường
+                </button>
+                <button class="tool-btn btn-purple" id="popup-btn-body">
+                    ✂️ Ép Sát Thân Xe
+                </button>
+                <button class="tool-btn btn-amber" id="popup-btn-scan">
+                    ⚡ Quét &lt; 5 Điểm
+                </button>
+                <button class="tool-btn btn-blue" id="popup-btn-yaw">
+                    🔄 Khử Lật Góc 180°
+                </button>
+                <button class="tool-btn btn-rose" id="popup-btn-dup">
+                    🔍 Soi Trùng Lặp
+                </button>
+                <button class="tool-btn btn-slate" id="popup-btn-outside">
+                    👁️ Tạm Ẩn Outside
+                </button>
+                <button class="tool-btn btn-rose" id="popup-btn-restore" style="grid-column: span 2; background: rgba(239, 68, 68, 0.25); border: 1.5px solid #ef4444; color: #fca5a5;">
+                    ⏪ Khôi Phục Dữ Liệu Gốc
+                </button>
+            </div>
+        </div>
+
+        <!-- KHUNG 2: ĐIỀU KHIỂN TRACK ĐANG CHỌN -->
+        <div class="group-card">
+            <div class="group-badge">
+                <span>🎯 TRACK HIỆN TẠI</span>
+                <button class="btn-small" id="popup-btn-get-track">🎯 Lấy Hiện Tại</button>
+            </div>
+            
+            <div class="row">
+                <span class="label">Track ID:</span>
+                <input type="number" class="input-mini" id="popup-track-id" placeholder="ID" min="1" />
+                <div class="dim-inputs">
+                    <input type="number" step="0.01" class="dim-input" id="popup-dim-l" placeholder="L" title="Chiều dài" />
+                    <input type="number" step="0.01" class="dim-input" id="popup-dim-w" placeholder="W" title="Chiều rộng" />
+                    <input type="number" step="0.01" class="dim-input" id="popup-dim-h" placeholder="H" title="Chiều cao" />
+                </div>
+            </div>
+
+            <div class="row">
+                <button class="tool-btn btn-blue" id="popup-btn-invert-yaw" style="flex: 1;">🔄 Đảo 180°</button>
+            </div>
+
+            <button class="btn-block-action" id="popup-btn-sync-single">
+                🔄 Đồng Bộ Size Toàn Track Này (Alt + D)
+            </button>
+
+            
+        </div>
+
+        <!-- THÔNG BÁO TRẠNG THÁI -->
+        <div class="status-box" id="popup-status-box">
+            <span id="popup-status">Sẵn sàng thực thi trên trang CVAT</span>
+        </div>
+    </div>
+
+    <script src="Trang Popup.js"></script>
+</body>
+</html>
